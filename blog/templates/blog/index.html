@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Blog</title>
-</head>
-<body>
-    <h1>Welcome to My Blog!</h1>
-</body>
-</html>
+{% extends 'blog/base.html' %}
+
+{% block title %}Home - Garakuta がらくた{% endblock %}
+
+{% block content %}
+<h1>Welcome to My Blog!</h1>
+<p>이곳에서 게시글을 확인할 수 있습니다.</p>
+{% endblock %}
