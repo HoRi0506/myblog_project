@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     
     "blog",
+    "board", # 게시판
     
     "django.contrib.sites",
     "allauth",

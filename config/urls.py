@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),  # 메인 페이지
     path('accounts/', include('allauth.urls')),  # allauth를 위한 URL 추가
+    path('board/', include('board.urls')), # 자유 게시판 url 추가
 ]

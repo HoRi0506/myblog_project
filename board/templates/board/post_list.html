@@ -1,0 +1,59 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h2>자유 게시판</h2>
+
+<!-- 작성하기 버튼을 오른쪽 정렬하는 컨테이너 -->
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'post_create' %}" class="btn btn-primary">작성하기</a> <!-- 게시글 작성 버튼 -->
+</div>
+
+<!-- 게시글 목록을 출력 -->
+<ul class="list-group">
+    <!-- 각 게시글을 반복하여 출력 -->
+    {% for post in posts %}
+        <li class="list-group-item">
+            <!-- 게시글 제목, 작성자, 작성일을 출력 -->
+            <strong>{{ post.title }}</strong> by {{ post.author }} on {{ post.created_at }}
+        </li>
+    {% empty %}
+        <!-- 게시글이 없을 때 출력할 메시지 -->
+        <li class="list-group-item">게시글이 없습니다.</li>
+    {% endfor %}
+</ul>
+
+<!-- 페이지네이션 UI -->
+<div class="d-flex justify-content-center mt-4">
+    {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!-- 이전 페이지로 이동하는 버튼 -->
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Prev">
+                            <span aria-hidden="true">&laquo;</span> <!-- '«' 기호를 사용 -->
+                        </a>
+                    </li>
+                {% endif %}
+                
+                <!-- 각 페이지 번호를 출력 -->
+                {% for num in paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+                
+                <!-- 다음 페이지로 이동하는 버튼 -->
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span> <!-- '»' 기호를 사용 -->
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+
+{% endblock %}

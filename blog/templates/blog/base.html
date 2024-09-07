@@ -11,18 +11,25 @@
 </head>
 <body>
     {% if request.path != '/accounts/google/login/' %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light align-items-center">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">Garakuta がらくた</a>
+                <a class="navbar-brand" href="/">Garakuta がらくた</a> <!-- 메인 페이지 이동 -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto"> <!-- 좌측 정렬 -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'post_list' %}">자유 게시판</a> <!-- 자유 게시판 -->
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto"> <!-- 우측 정렬 -->
                         {% if user.is_authenticated %}
+                            <!-- 로그인된 사용자의 이름을 표시 -->
                             <li class="nav-item">
                                 <span class="navbar-text" style="margin-right: 10px;">{{ user.username }}</span>
                             </li>
+                            <!-- 로그아웃 버튼 -->
                             <li class="nav-item">
                                 <form method="POST" action="{% url 'account_logout' %}">
                                     {% csrf_token %}
@@ -30,6 +37,7 @@
                                 </form>
                             </li>
                         {% else %}
+                            <!-- 구글 로그인 버튼 -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{% provider_login_url 'google' %}">Login with Google</a>
                             </li>
