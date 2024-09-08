@@ -7,7 +7,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Garakuta がらくた{% endblock %}</title>
+
+    <!-- Bootstrap CSS 파일 로드 -->
     <link rel="stylesheet" href="{% static 'blog/bootstrap.min.css' %}">
+
+    <!-- 추가 CSS 스타일 -->
+    <style>
+        /* 카드 중앙 정렬 및 크기 설정 */
+        .card {
+            max-width: 800px; /* 카드 최대 너비 */
+            margin: 0 auto; /* 중앙 정렬 */
+            padding: 20px;
+        }
+
+        /* 폼 그룹 내 레이블 스타일 */
+        .form-group label {
+            font-weight: bold; /* 레이블의 글자를 굵게 표시 */
+        }
+
+        /* 입력 필드 및 텍스트 박스 스타일 */
+        .form-control {
+            width: 100%; /* 전체 너비 */
+            padding: 10px; /* 여백 추가 */
+            border-radius: 5px; /* 둥근 테두리 */
+            border: 1px solid #ccc; /* 테두리 색상 */
+        }
+
+        /* 제출 버튼 중앙 정렬 */
+        .text-center {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     {% if request.path != '/accounts/google/login/' %}
@@ -52,6 +82,7 @@
         {% block content %}{% endblock %}
     </div>
 
+    <!-- Bootstrap JavaScript 파일 로드 -->
     <script src="{% static 'blog/bootstrap.min.js' %}"></script>
 </body>
 </html>

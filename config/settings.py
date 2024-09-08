@@ -16,9 +16,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
-    "blog",
+    "blog", # 메인
     "board", # 게시판
-    
+
     "django.contrib.sites",
     "allauth",
     "allauth.account",

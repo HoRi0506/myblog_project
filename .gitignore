@@ -1,2 +1,3 @@
 config/settings.py
 db.sqlite3
+board/migrations/

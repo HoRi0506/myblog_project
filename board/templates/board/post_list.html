@@ -1,59 +1,75 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<h2>자유 게시판</h2>
+<div class="container mt-3">
+    <div class="row">
+        <!-- 좌측: 현재 페이지 정보 표시 -->
+        <div class="col-md-2 p-0 m-0">
+            <div class="p-1">
+                <h5>자유 게시판</h5>
+            </div>
+        </div>
 
-<!-- 작성하기 버튼을 오른쪽 정렬하는 컨테이너 -->
-<div class="d-flex justify-content-end mb-3">
-    <a href="{% url 'post_create' %}" class="btn btn-primary">작성하기</a> <!-- 게시글 작성 버튼 -->
-</div>
+        <!-- 우측: 게시판 목록, 검색창 및 게시글 작성 버튼 -->
+        <div class="col-md-10 p-0 m-0">
+            <!-- 검색창과 게시글 작성 버튼을 같은 줄에 배치 -->
+            <div class="d-flex justify-content-end align-items-center mb-3">
+                <!-- 검색창 -->
+                <form method="get" action="{% url 'post_list' %}" class="d-flex" style="flex-grow: 1; max-width: 40%;">
+                    <input type="text" name="q" class="form-control me-2 w-50" placeholder="검색어를 입력하세요" value="{{ request.GET.q }}" style="flex-grow: 2;">
+                    <button type="submit" class="btn btn-outline-secondary me-3">검색</button>
+                </form>
+                <!-- 새 게시글 작성 버튼 -->
+                <a href="{% url 'post_create' %}" class="btn btn-primary">새 게시글 작성</a>
+            </div>
 
-<!-- 게시글 목록을 출력 -->
-<ul class="list-group">
-    <!-- 각 게시글을 반복하여 출력 -->
-    {% for post in posts %}
-        <li class="list-group-item">
-            <!-- 게시글 제목, 작성자, 작성일을 출력 -->
-            <strong>{{ post.title }}</strong> by {{ post.author }} on {{ post.created_at }}
-        </li>
-    {% empty %}
-        <!-- 게시글이 없을 때 출력할 메시지 -->
-        <li class="list-group-item">게시글이 없습니다.</li>
-    {% endfor %}
-</ul>
+            <!-- 게시글 목록 -->
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">제목</th>
+                        <th scope="col">추가 일시</th>
+                        <th scope="col">수정 일시</th>
+                        <th scope="col">게시 상태</th>
+                        <th scope="col">작성자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                        <tr>
+                            <td>{{ post.title }}</td>
+                            <td>{{ post.created_at }}</td>
+                            <td>{{ post.updated_at }}</td>
+                            <td>{{ post.status }}</td>
+                            <td>{{ post.author }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">현재 등록된 글이 없습니다.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-<!-- 페이지네이션 UI -->
-<div class="d-flex justify-content-center mt-4">
-    {% if is_paginated %}
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <!-- 이전 페이지로 이동하는 버튼 -->
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Prev">
-                            <span aria-hidden="true">&laquo;</span> <!-- '«' 기호를 사용 -->
-                        </a>
-                    </li>
+            <!-- 페이지네이션 -->
+            <div class="d-flex justify-content-center">
+                {% if is_paginated %}
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1">&laquo; 처음</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a></li>
+                        {% endif %}
+
+                        <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a></li>
+                        {% endif %}
+                    </ul>
                 {% endif %}
-                
-                <!-- 각 페이지 번호를 출력 -->
-                {% for num in paginator.page_range %}
-                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                    </li>
-                {% endfor %}
-                
-                <!-- 다음 페이지로 이동하는 버튼 -->
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span> <!-- '»' 기호를 사용 -->
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
-
 {% endblock %}
