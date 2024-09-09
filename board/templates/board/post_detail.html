@@ -1,0 +1,199 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <!-- 좌측: 현재 페이지 정보 표시 -->
+        <div class="col-md-2 p-0 m-0">
+            <div class="p-1">
+                <h5>자유 게시판</h5> <!-- 현재 페이지 제목 -->
+            </div>
+        </div>
+
+        <!-- 우측: 게시글 상세 내용 -->
+        <div class="col-md-10 p-0 m-0">
+            <!-- 게시글 및 버튼들을 포함한 박스 -->
+            <div class="post-container" style="min-height: 500px;"> <!-- 최소 높이 설정 -->
+                <!-- 제목 -->
+                <div class="post-title">
+                    <h2>{{ post.title }}</h2>
+                </div>
+
+                <!-- 작성자 정보와 아이콘들 -->
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <!-- 작성자 정보 -->
+                    <div class="d-flex align-items-center">
+                        <div class="ms-2">
+                            <strong>{{ post.author }}</strong>
+                            <span class="text-muted ms-2">{{ post.created_at|date:"Y.m.d H:i" }}</span>
+                        </div>
+                    </div>
+
+                    <!-- 아이콘들 -->
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-eye"></i> {{ post.view_count }} <!-- 조회수 -->
+                        </div>
+                        <div class="me-3">
+                            <i class="fas fa-comments"></i> {{ post.comment_count }} <!-- 댓글 수 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 구분선 -->
+                <hr>
+
+                <!-- 버튼들: 목록, 수정, 삭제 -->
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'post_list' %}" class="btn btn-secondary btn-sm me-2">목록</a>
+                    {% if post.author == user or user.is_superuser %}
+                        <a href="{% url 'post_edit' post.pk %}" class="btn btn-primary btn-sm me-2">수정</a>
+                        <form action="{% url 'post_delete' post.pk %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <!-- 본문 내용 -->
+                <div class="post-content mb-4 mt-4">
+                    <p>{{ post.content|linebreaks }}</p>
+                </div>
+
+            </div>
+
+            <!-- 댓글 작성 UI -->
+            <div class="mb-4">
+                <!-- 좋아요 아이콘 -->
+                <div class="d-flex align-items-center" id="like-section">
+                    <i id="like-btn" class="fa{% if request.user.is_authenticated and request.user in post.likes.all %} fa-heart text-danger{% else %} far fa-heart{% endif %}" style="cursor: pointer; font-size: 24px;"></i>
+                    <span id="like-count" class="ms-2">{{ post.total_likes }}</span>
+                </div>
+
+                <!-- 구분선 -->
+                <hr>
+                <h5>댓글 작성</h5>
+                <form method="post" action="{% url 'add_comment' post.pk %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea name="comment" class="form-control" rows="3" placeholder="댓글을 입력하세요..." required></textarea>
+                    </div>
+                    <div class="text-end mt-2">
+                        <button type="submit" class="btn btn-dark btn-sm">댓글 작성</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 기존 댓글 목록 -->
+            <div class="comment-section">
+                <h5>댓글 ({{ post.comments.count }})</h5>
+                <ul class="list-group list-group-flush">
+                    {% for comment in post.comments.all %}
+                        <li class="list-group-item">
+                            <strong>{{ comment.author }}</strong>
+                            <span class="text-muted">{{ comment.created_at|date:"Y.m.d H:i" }}</span>
+                            <p>{{ comment.text|linebreaks }}</p>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">댓글이 없습니다.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('like-btn').addEventListener('click', function() {
+        const likeBtn = this;
+        const postId = "{{ post.pk }}";
+        const likeCount = document.getElementById('like-count');
+
+        fetch("{% url 'post_like' post.pk %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.liked) {
+                likeBtn.classList.remove('far');
+                likeBtn.classList.add('fas', 'text-danger');  // 하트가 채워진 형태로 변경
+            } else {
+                likeBtn.classList.remove('fas', 'text-danger');
+                likeBtn.classList.add('far');  // 빈 하트로 변경
+            }
+            likeCount.textContent = data.total_likes;  // 좋아요 수 갱신
+        })
+        .catch(error => {
+            console.error('Error:', error);  // 에러 출력
+            alert('좋아요 기능에 문제가 발생했습니다. 다시 시도해주세요.');
+        });
+    });
+</script>
+
+{% endblock %}
+
+<!-- 인라인 스타일 추가 -->
+<style>
+    .post-title h2 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .post-content p {
+        font-size: 1.125rem;
+        line-height: 1.6;
+    }    
+
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+
+    .fa-heart, .fa-heart-o {
+        cursor: pointer;
+    }
+
+    .i.fas {
+        font-size: 1.2rem;
+    }
+
+    .comment-section {
+        margin-top: 20px;
+    }
+
+    .comment-section h5 {
+        margin-bottom: 10px;
+    }
+
+    .list-group-item {
+        font-size: 1rem;
+    }
+
+    /* 최소 높이 적용 */
+    .post-container {
+        min-height: 500px; /* 게시글 제목, 작성자, 내용, 버튼을 묶는 컨테이너의 최소 높이 */
+    }
+</style>

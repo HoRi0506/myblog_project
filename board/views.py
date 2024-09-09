@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
-from .models import Post  # 게시글 모델
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Post, Comment  # 게시글 모델
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm  # 게시글 작성 폼
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 import logging
 
 # 로그 설정
@@ -55,3 +56,99 @@ def post_list(request):
     except Exception as e:
         logger.error(f"Error in post_list: {str(e)}")
         return render(request, 'board/post_list.html', {'posts': []})
+
+# 게시글 상세 페이지 보기
+def post_detail(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)  # 해당 게시글이 없으면 404 에러 반환
+        return render(request, 'board/post_detail.html', {'post': post})
+    except Exception as e:
+        logger.error(f"Error in post_detail: {str(e)}")
+        return redirect('post_list')
+
+# 게시글 수정
+@login_required
+def post_edit(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)
+
+        if request.user != post.author and not request.user.is_superuser:
+            logger.error(f"Unauthorized attempt to edit post {post.pk} by {request.user}")
+            return redirect('post_list')  # 작성자나 관리자가 아니면 목록으로 리디렉션
+        
+        if request.method == 'POST':
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                form.save()
+                logger.info(f"Post {post.pk} edited by {request.user}")
+                return redirect('post_detail', pk=post.pk)  # 수정 후 상세 페이지로 리디렉션
+            else:
+                logger.error(f"Form validation error while editing post {post.pk}: {form.errors}")
+        else:
+            form = PostForm(instance=post)
+
+        return render(request, 'board/post_edit.html', {'form': form, 'post': post})
+    except Exception as e:
+        logger.error(f"Error in post_edit: {str(e)}")
+        return redirect('post_list')
+
+# 게시글 삭제
+@login_required
+def post_delete(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)
+        
+        if request.user != post.author and not request.user.is_superuser:
+            logger.error(f"Unauthorized attempt to delete post {post.pk} by {request.user}")
+            return redirect('post_list')  # 작성자나 관리자가 아니면 목록으로 리디렉션
+
+        if request.method == 'POST':
+            post.delete()
+            logger.info(f"Post {post.pk} deleted by {request.user}")
+            return redirect('post_list')  # 삭제 후 목록으로 리디렉션
+
+        return render(request, 'board/post_confirm_delete.html', {'post': post})
+    except Exception as e:
+        logger.error(f"Error in post_delete: {str(e)}")
+        return redirect('post_list')
+
+@login_required
+def add_comment(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)  # 해당 게시글 가져오기
+        if request.method == 'POST':
+            comment_text = request.POST.get('comment')  # 폼에서 댓글 내용 가져오기
+            if comment_text:
+                comment = Comment.objects.create(
+                    post=post,  # 댓글이 달린 게시글
+                    author=request.user,  # 댓글 작성자
+                    text=comment_text  # 댓글 내용
+                )
+                logger.info(f"New comment added by {request.user}: {comment.text}")
+                return redirect('post_detail', pk=post.pk)  # 댓글 추가 후 게시글 상세보기로 리디렉트
+            else:
+                logger.error("No comment text provided")
+        else:
+            logger.error("Invalid request method for add_comment")
+    except Exception as e:
+        logger.error(f"Error in add_comment: {str(e)}")
+    
+    return redirect('post_detail', pk=post.pk)
+
+@login_required
+def post_like(request, pk):
+    try:
+        post = get_object_or_404(Post, pk=pk)
+        if request.user in post.likes.all():
+            post.likes.remove(request.user)  # 이미 좋아요를 눌렀으면 취소
+            liked = False
+        else:
+            post.likes.add(request.user)  # 좋아요 추가
+            liked = True
+
+        return JsonResponse({
+            'liked': liked,
+            'total_likes': post.total_likes()
+        })
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
