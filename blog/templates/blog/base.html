@@ -54,6 +54,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'post_list' %}">자유 게시판</a> <!-- 자유 게시판 -->
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'git_post' %}">GIT POST</a> <!-- git 작업물 게시판 -->
+                        </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> <!-- 우측 정렬 -->
                         {% if user.is_authenticated %}

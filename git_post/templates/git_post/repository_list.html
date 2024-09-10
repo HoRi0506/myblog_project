@@ -1,0 +1,85 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <!-- 좌측: 현재 페이지 정보 표시 -->
+        <div class="col-md-2 p-0 m-0">
+            <div class="p-1">
+                <h5>GIT POST</h5>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- 각 repository를 3개씩 한 줄로 표시 -->
+                {% for repo in page_obj %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <!-- 임시 이미지 -->
+                        <img src="{{ MEDIA_URL }}/git_post/git_image.png" class="card-img-top" alt="{{ repo.name }}">
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ repo.name }}
+                                <br>
+                                <!-- New/Update 상태 표시 -->
+                                {% if 'New' in repo.status %}
+                                    <span class="badge bg-success">New</span>
+                                {% endif %}
+                                {% if 'Update' in repo.status %}
+                                    <span class="badge bg-warning">Update</span>
+                                {% endif %}
+                            </h5>
+
+                            <!-- repository 설명 표시 -->
+                            <p class="card-text">{{ repo.description|default:"No description available" }}</p>
+
+                            <!-- 사용 언어 -->
+                            <p class="card-text"><strong>{{ repo.languages }}</strong></p>
+
+                            <p class="card-text">
+                                <!-- 최근 작업일 -->
+                                <small class="text-muted">pushed: {{ repo.pushed_at|slice:":10" }}</small>
+                                <br>
+                                <!-- 생성 일시 -->
+                                <small class="text-muted">create: {{ repo.created_at|slice:":10" }}</small>
+                            </p>
+
+                            <!-- 카드 전체를 클릭하면 repository로 이동 -->
+                            <a href="{{ repo.html_url }}" class="stretched-link"></a> <!-- GitHub repository로 이동 -->
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- 페이지네이션 -->
+            <div class="d-flex justify-content-center">
+                <nav>
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">&laquo; 처음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item disabled">
+                            <span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                        </li>
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

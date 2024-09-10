@@ -41,3 +41,11 @@
 - [1차 목표](https://www.notion.so/1-d1325722d2c4496a8cfe7fddd8798ee0?pvs=4)
 
 <br>
+
+- [2차 목표](https://www.notion.so/2-70a33021608b4690b099b1aa945f4464?pvs=4)
+
+<br>
+
+- [3차 목표](https://www.notion.so/3-8c9d610edd17439cae4d8266d632488c?pvs=4)
+
+<br>

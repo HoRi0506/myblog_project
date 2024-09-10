@@ -17,10 +17,16 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),  # 메인 페이지
     path('accounts/', include('allauth.urls')),  # allauth를 위한 URL 추가
     path('board/', include('board.urls')), # 자유 게시판 url 추가
+    path('git_post/', include('git_post.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,8 +1,15 @@
 from pathlib import Path
+import os, json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-jpepi8hwqb_ommlo+w&mpdlvdcuv@$f6%%19b72uv8k@%bie*!"
+django_key = os.path.join(BASE_DIR, 'django_key.json')
+
+with open(django_key) as dk:
+    key = json.load(dk)
+    DSK = key['key']
+
+SECRET_KEY = DSK
 
 DEBUG = True
 
@@ -18,12 +25,15 @@ INSTALLED_APPS = [
     
     "blog", # 메인
     "board", # 게시판
+    "git_post", # git 작업물 게시판
 
     "django.contrib.sites",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    
+    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -112,5 +122,13 @@ SOCIALACCOUNT_PROVIDERS = {
 # 세션 시간 설정
 SESSION_COOKIE_AGE = 900  # 15분
 
-# import logging
-# logging.basicConfig(level=logging.DEBUG)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+CRONJOBS = [
+    ('*/120 * * * *', 'git_post.cron.update_repositories'),  # 2시간마다 실행
+]
+
+import logging
+logging.basicConfig(level=logging.DEBUG)
