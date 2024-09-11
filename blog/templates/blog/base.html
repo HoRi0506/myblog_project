@@ -15,9 +15,11 @@
 
     <!-- 추가 CSS 스타일 -->
     <style>
+        /* 특정 페이지에서만 배경 이미지를 적용하기 위한 스타일 조건 */
+        {% if request.path == '/' %}
         /* 배경 이미지 두 개를 mix-blend-mode로 설정 */
         .background-container {
-            background: url("../media/base/background2.jpg") no-repeat center center fixed;
+            background: url("{{ MEDIA_URL }}/media/base/background2.jpg") no-repeat center center fixed;
             background-size: cover;
             position: relative;
             height: 100vh; /* 섹션 높이를 화면 전체로 설정 */
@@ -31,7 +33,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url("../media/base/main_image2.jpeg") no-repeat center center;
+            background: url("{{ MEDIA_URL }}/media/base/main_image2.jpeg") no-repeat center center;
             background-size: cover;
             background-position: center;
             mix-blend-mode: screen; /* 검정색 부분에서 main_image2가 더 잘 보이도록 screen 사용 */
@@ -45,7 +47,7 @@
             z-index: 2; /* 이미지 위에 텍스트 표시 */
             font-size: 3rem;
             text-align: center;
-            color: black; /* 기본 색상은 하얀색 */
+            color: black;
             opacity: 0.6; /* 잔상이 자연스럽게 보이도록 투명도 조정 */
             mix-blend-mode: overlay; /* 글자가 이미지와 겹치면 이미지 잔상을 받도록 함 */
         }
@@ -57,8 +59,9 @@
         /* 이미지와 겹치는 부분에서는 텍스트 색상을 검정색으로 변경 */
         .background-container .overlay-text, .background-container .overlay-subtext {
             mix-blend-mode: normal;
-            color: white; /* 이미지 부분에서는 검정색 */
+            color: white;
         }
+        {% endif %}
 
         /* 카드 중앙 정렬 및 크기 설정 */
         .card {
