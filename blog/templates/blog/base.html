@@ -11,13 +11,14 @@
     <!-- Bootstrap CSS 파일 로드 -->
     <link rel="stylesheet" href="{% static 'blog/bootstrap.min.css' %}">
 
+    <!-- FontAwesome 아이콘 사용 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <!-- 추가 CSS 스타일 -->
     <style>
-        /* 특정 페이지에서만 배경 이미지를 적용하기 위한 스타일 조건 */
+        /* 특정 페이지(예: 메인 페이지)에서만 배경 이미지를 적용 */
         {% if request.path == '/' %}
-        /* 배경 이미지 두 개를 mix-blend-mode로 설정 */
+        /* 배경 이미지 두 개를 mix-blend-mode로 겹쳐서 사용 */
         .background-container {
             background: url("{{ MEDIA_URL }}/media/base/background2.jpg") no-repeat center center fixed;
             background-size: cover;
@@ -25,7 +26,7 @@
             height: 100vh; /* 섹션 높이를 화면 전체로 설정 */
         }
 
-        /* mix-blend-mode를 사용하여 검정색 부분에 이미지 덮기 */
+        /* 메인 이미지 위에 또 다른 이미지 덮기 */
         .background-container::before {
             content: '';
             position: absolute;
@@ -36,27 +37,28 @@
             background: url("{{ MEDIA_URL }}/media/base/main_image2.jpeg") no-repeat center center;
             background-size: cover;
             background-position: center;
-            mix-blend-mode: screen; /* 검정색 부분에서 main_image2가 더 잘 보이도록 screen 사용 */
-            opacity: 0.9; /* 이미지가 너무 밝지 않도록 조정 */
-            z-index: 1; /* 이미지가 배경 위에 표시되도록 설정 */
+            mix-blend-mode: screen; /* 이미지 블렌딩 */
+            opacity: 0.9;
+            z-index: 1;
         }
 
-        /* 텍스트 색상 조정 */
+        /* 메인 텍스트와 서브 텍스트 */
         .overlay-text, .overlay-subtext {
             position: relative;
             z-index: 2; /* 이미지 위에 텍스트 표시 */
             font-size: 3rem;
             text-align: center;
             color: black;
-            opacity: 0.6; /* 잔상이 자연스럽게 보이도록 투명도 조정 */
-            mix-blend-mode: overlay; /* 글자가 이미지와 겹치면 이미지 잔상을 받도록 함 */
+            opacity: 0.6;
+            mix-blend-mode: overlay;
         }
 
+        /* 서브텍스트 크기 조정 */
         .overlay-subtext {
             font-size: 1.5rem;
         }
 
-        /* 이미지와 겹치는 부분에서는 텍스트 색상을 검정색으로 변경 */
+        /* 텍스트가 이미지와 겹칠 때 색상 설정 */
         .background-container .overlay-text, .background-container .overlay-subtext {
             mix-blend-mode: normal;
             color: white;
@@ -66,21 +68,21 @@
         /* 카드 중앙 정렬 및 크기 설정 */
         .card {
             max-width: 800px; /* 카드 최대 너비 */
-            margin: 0 auto; /* 중앙 정렬 */
+            margin: 0 auto;
             padding: 20px;
         }
 
         /* 폼 그룹 내 레이블 스타일 */
         .form-group label {
-            font-weight: bold; /* 레이블의 글자를 굵게 표시 */
+            font-weight: bold;
         }
 
         /* 입력 필드 및 텍스트 박스 스타일 */
         .form-control {
-            width: 100%; /* 전체 너비 */
-            padding: 10px; /* 여백 추가 */
-            border-radius: 5px; /* 둥근 테두리 */
-            border: 1px solid #ccc; /* 테두리 색상 */
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
 
         /* 제출 버튼 중앙 정렬 */
@@ -91,28 +93,32 @@
 </head>
 <body>
     {% if request.path != '/accounts/google/login/' %}
+        <!-- 네비게이션 바 시작 -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light align-items-center">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">Garakuta がらくた</a> <!-- 메인 페이지 이동 -->
+                <a class="navbar-brand" href="/">Garakuta がらくた</a> <!-- 메인 페이지 링크 -->
+                
+                <!-- 수정된 부분: 버튼에 data-bs-toggle="collapse" 및 data-bs-target="#navbarNav" 추가 -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav me-auto"> <!-- 좌측 정렬 -->
+
+                <!-- 네비게이션 바 내용: 좌측과 우측 정렬 -->
+                <div class="collapse navbar-collapse" id="navbarNav"> <!-- 수정된 부분: ID 추가로 버튼과 연동 -->
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'post_list' %}">자유 게시판</a> <!-- 자유 게시판 -->
+                            <a class="nav-link" href="{% url 'post_list' %}">자유 게시판</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'git_post' %}">GIT POST</a> <!-- git 작업물 게시판 -->
+                            <a class="nav-link" href="{% url 'git_post' %}">GIT POST</a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav ms-auto"> <!-- 우측 정렬 -->
+                    <ul class="navbar-nav ms-auto">
                         {% if user.is_authenticated %}
-                            <!-- 로그인된 사용자의 이름을 표시 -->
                             <li class="nav-item">
                                 <span class="navbar-text" style="margin-right: 10px;">{{ user.username }}</span>
                             </li>
-                            <!-- 로그아웃 버튼 -->
+                            <!-- 로그아웃 폼 -->
                             <li class="nav-item">
                                 <form method="POST" action="{% url 'account_logout' %}">
                                     {% csrf_token %}
@@ -120,7 +126,6 @@
                                 </form>
                             </li>
                         {% else %}
-                            <!-- 구글 로그인 버튼 -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{% provider_login_url 'google' %}">Login with Google</a>
                             </li>
@@ -131,7 +136,7 @@
         </nav>
     {% endif %}
 
-    <!-- 배경 이미지를 적용할 섹션 -->
+    <!-- 배경 이미지가 있는 섹션 -->
     <section class="background-container">
         <div class="container mt-4">
             {% block content %}{% endblock %}

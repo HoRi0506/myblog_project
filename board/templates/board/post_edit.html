@@ -34,7 +34,7 @@
                         </div>
 
                         <!-- 텍스트 편집 가능한 영역: textarea (기존 내용 포함) -->
-                        <textarea id="content" name="content" class="form-control border" style="min-height: 450px;" required>{{ form.content.value }}</textarea>
+                        <textarea id="content" name="content" class="form-control border" style="min-height: 450px;" required>{{ form.content.value|safe }}</textarea>
                     </div>
 
                     <!-- 제출 버튼 -->

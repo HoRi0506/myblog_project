@@ -10,6 +10,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)  # 좋아요한 사용자들
+    counting = models.PositiveIntegerField(default=0)  # 조회수 필드 추가
 
     def total_likes(self):
         return self.likes.count()  # 좋아요 수 반환

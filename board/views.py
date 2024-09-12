@@ -61,6 +61,11 @@ def post_list(request):
 def post_detail(request, pk):
     try:
         post = get_object_or_404(Post, pk=pk)  # 해당 게시글이 없으면 404 에러 반환
+        
+        # 조회수 증가(같은 사용자가 여러 번 접속해도 증가)
+        post.counting += 1
+        post.save()
+        
         return render(request, 'board/post_detail.html', {'post': post})
     except Exception as e:
         logger.error(f"Error in post_detail: {str(e)}")
