@@ -6,7 +6,7 @@
         <!-- 좌측: 현재 페이지 정보 표시 -->
         <div class="col-md-2 p-0 m-0">
             <div class="p-1">
-                <h5>자유 게시판</h5> <!-- 현재 페이지 제목 -->
+                <h5>스터디 게시판</h5> <!-- 현재 페이지 제목 -->
             </div>
         </div>
 
@@ -45,10 +45,10 @@
 
                 <!-- 버튼들: 목록, 수정, 삭제 -->
                 <div class="d-flex justify-content-end">
-                    <a href="{% url 'board:board_post_list' %}" class="btn btn-secondary btn-sm me-2">목록</a>
+                    <a href="{% url 'study:study_post_list' %}" class="btn btn-secondary btn-sm me-2">목록</a>
                     {% if post.author == user or user.is_superuser %}
-                        <a href="{% url 'board:board_post_edit' post.pk %}" class="btn btn-primary btn-sm me-2">수정</a>
-                        <form action="{% url 'board:board_post_delete' post.pk %}" method="post" class="d-inline">
+                        <a href="{% url 'study:study_post_edit' post.pk %}" class="btn btn-primary btn-sm me-2">수정</a>
+                        <form action="{% url 'study:study_post_delete' post.pk %}" method="post" class="d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm">삭제</button>
                         </form>
@@ -73,7 +73,7 @@
                 <!-- 구분선 -->
                 <hr>
                 <h5>댓글 작성</h5>
-                <form method="post" action="{% url 'board:board_add_comment' post.pk %}">
+                <form method="post" action="{% url 'study:study_add_comment' post.pk %}">
                     {% csrf_token %}
                     <div class="form-group">
                         <textarea name="comment" class="form-control" rows="3" placeholder="댓글을 입력하세요..." required></textarea>
@@ -109,7 +109,7 @@
         const postId = "{{ post.pk }}";
         const likeCount = document.getElementById('like-count');
 
-        fetch("{% url 'board:board_post_like' post.pk %}", {
+        fetch("{% url 'study_post_like' post.pk %}", {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',

@@ -20,7 +20,7 @@ def post_create(request):
                 post.author = request.user  # 현재 로그인된 사용자를 작성자로 추가
                 post.save()  # 게시글 저장
                 logger.info(f"New post created by {request.user}: {post.title}")
-                return redirect('board_post_list')  # 게시글 목록 페이지로 리디렉트
+                return redirect('study_post_list')  # 게시글 목록 페이지로 리디렉트
             else:
                 logger.error(f"Form validation error: {form.errors}")
         else:
@@ -30,7 +30,7 @@ def post_create(request):
         logger.error(f"Error in post_create: {str(e)}")
         form = PostForm()  # 오류 발생 시 폼 다시 생성
 
-    return render(request, 'board/post_create.html', {'form': form})  # 템플릿에 폼 전달
+    return render(request, 'study/post_create.html', {'form': form})  # 템플릿에 폼 전달
 
 # 게시글 목록을 출력하는 뷰 함수
 def post_list(request):
@@ -48,14 +48,14 @@ def post_list(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        return render(request, 'board/post_list.html', {
+        return render(request, 'study/post_list.html', {
             'posts': page_obj,
             'is_paginated': page_obj.has_other_pages(),
             'page_obj': page_obj,
         })
     except Exception as e:
         logger.error(f"Error in post_list: {str(e)}")
-        return render(request, 'board/post_list.html', {'posts': []})
+        return render(request, 'study/post_list.html', {'posts': []})
 
 # 게시글 상세 페이지 보기
 def post_detail(request, pk):
@@ -66,10 +66,10 @@ def post_detail(request, pk):
         post.counting += 1
         post.save()
         
-        return render(request, 'board/post_detail.html', {'post': post})
+        return render(request, 'study/post_detail.html', {'post': post})
     except Exception as e:
         logger.error(f"Error in post_detail: {str(e)}")
-        return redirect('board_post_list')
+        return redirect('study_post_list')
 
 # 게시글 수정
 @login_required
@@ -79,23 +79,23 @@ def post_edit(request, pk):
 
         if request.user != post.author and not request.user.is_superuser:
             logger.error(f"Unauthorized attempt to edit post {post.pk} by {request.user}")
-            return redirect('board_post_list')  # 작성자나 관리자가 아니면 목록으로 리디렉션
+            return redirect('study_post_list')  # 작성자나 관리자가 아니면 목록으로 리디렉션
         
         if request.method == 'POST':
             form = PostForm(request.POST, instance=post)
             if form.is_valid():
                 form.save()
                 logger.info(f"Post {post.pk} edited by {request.user}")
-                return redirect('board_post_detail', pk=post.pk)  # 수정 후 상세 페이지로 리디렉션
+                return redirect('study_post_detail', pk=post.pk)  # 수정 후 상세 페이지로 리디렉션
             else:
                 logger.error(f"Form validation error while editing post {post.pk}: {form.errors}")
         else:
             form = PostForm(instance=post)
 
-        return render(request, 'board/post_edit.html', {'form': form, 'post': post})
+        return render(request, 'study/post_edit.html', {'form': form, 'post': post})
     except Exception as e:
         logger.error(f"Error in post_edit: {str(e)}")
-        return redirect('board_post_list')
+        return redirect('study_post_list')
 
 # 게시글 삭제
 @login_required
@@ -105,17 +105,17 @@ def post_delete(request, pk):
         
         if request.user != post.author and not request.user.is_superuser:
             logger.error(f"Unauthorized attempt to delete post {post.pk} by {request.user}")
-            return redirect('board_post_list')  # 작성자나 관리자가 아니면 목록으로 리디렉션
+            return redirect('study_post_list')  # 작성자나 관리자가 아니면 목록으로 리디렉션
 
         if request.method == 'POST':
             post.delete()
             logger.info(f"Post {post.pk} deleted by {request.user}")
-            return redirect('board_post_list')  # 삭제 후 목록으로 리디렉션
+            return redirect('study_post_list')  # 삭제 후 목록으로 리디렉션
 
-        return render(request, 'board/post_confirm_delete.html', {'post': post})
+        return render(request, 'study/post_confirm_delete.html', {'post': post})
     except Exception as e:
         logger.error(f"Error in post_delete: {str(e)}")
-        return redirect('board_post_list')
+        return redirect('study_post_list')
 
 @login_required
 def add_comment(request, pk):
@@ -130,7 +130,7 @@ def add_comment(request, pk):
                     text=comment_text  # 댓글 내용
                 )
                 logger.info(f"New comment added by {request.user}: {comment.text}")
-                return redirect('board_post_detail', pk=post.pk)  # 댓글 추가 후 게시글 상세보기로 리디렉트
+                return redirect('study_post_detail', pk=post.pk)  # 댓글 추가 후 게시글 상세보기로 리디렉트
             else:
                 logger.error("No comment text provided")
         else:
@@ -138,7 +138,7 @@ def add_comment(request, pk):
     except Exception as e:
         logger.error(f"Error in add_comment: {str(e)}")
     
-    return redirect('board_post_detail', pk=post.pk)
+    return redirect('study_post_detail', pk=post.pk)
 
 @login_required
 def post_like(request, pk):

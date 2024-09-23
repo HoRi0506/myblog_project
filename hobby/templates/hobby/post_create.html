@@ -1,0 +1,99 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <!-- 좌측: 현재 페이지 정보 표시 -->
+        <div class="col-md-2 p-0 m-0">
+            <div class="p-1">
+                <h5>취미 게시판</h5> <!-- 현재 페이지 제목 -->
+            </div>
+        </div>
+
+        <!-- 우측: 게시글 작성 영역 -->
+        <div class="col-md-9 p-0 m-0">
+            <div class="p-1">
+                <!-- 게시글 작성 폼 -->
+                <form method="post" enctype="multipart/form-data" id="postForm">
+                    {% csrf_token %}
+
+                    <!-- 제목 입력란 -->
+                    <div class="form-group mb-3">
+                        <input type="text" name="title" class="form-control border" placeholder="제목" required>
+                    </div>
+                    
+                    <!-- 내용 입력란 (textarea로 대체) -->
+                    <div class="form-group mb-3">
+                        <!-- 툴바: Bold, Italic, Underline, Image Upload 버튼 -->
+                        <div class="toolbar mb-2">
+                            <button type="button" class="btn btn-light" id="boldBtn"><strong>B</strong></button> <!-- 굵게(Bold) 버튼 -->
+                            <button type="button" class="btn btn-light" id="italicBtn"><em>I</em></button> <!-- 기울임(Italic) 버튼 -->
+                            <button type="button" class="btn btn-light" id="underlineBtn"><u>U</u></button> <!-- 밑줄(Underline) 버튼 -->
+                            <button type="button" class="btn btn-light" id="uploadImageBtn">📷</button> <!-- 이미지 업로드 버튼 -->
+                            <input type="file" id="imageInput" accept="image/*" style="display: none;"> <!-- 실제 이미지 파일 선택창 -->
+                        </div>
+
+                        <!-- 텍스트 편집 가능한 영역: textarea -->
+                        <textarea id="content" name="content" class="form-control border" style="min-height: 450px;" required></textarea>
+                    </div>
+
+                    <!-- 제출 버튼 -->
+                    <div class="text-left">
+                        <button type="submit" class="btn btn-dark">등록</button> <!-- 등록 버튼 -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- 자바스크립트로 툴바 기능 및 데이터 전송 추가 -->
+<script>
+    const textarea = document.getElementById('content');
+
+    // 선택된 텍스트를 굵게 만드는 함수
+    function wrapSelectedText(openTag, closeTag) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+
+        if (selectedText) {
+            const newText = openTag + selectedText + closeTag;
+            textarea.setRangeText(newText, start, end, 'end');
+        }
+    }
+
+    // Bold 버튼 클릭 시 동작
+    document.getElementById('boldBtn').addEventListener('click', function() {
+        wrapSelectedText("<b>", "</b>");  // 선택된 텍스트를 <b></b> 태그로 감쌈
+    });
+
+    // Italic 버튼 클릭 시 동작
+    document.getElementById('italicBtn').addEventListener('click', function() {
+        wrapSelectedText("<i>", "</i>");  // 선택된 텍스트를 <i></i> 태그로 감쌈
+    });
+
+    // Underline 버튼 클릭 시 동작
+    document.getElementById('underlineBtn').addEventListener('click', function() {
+        wrapSelectedText("<u>", "</u>");  // 선택된 텍스트를 <u></u> 태그로 감쌈
+    });
+
+    // 이미지 업로드 처리
+    document.getElementById('uploadImageBtn').addEventListener('click', function() {
+        document.getElementById('imageInput').click();
+    });
+
+    // 이미지 파일 선택 후 textarea에 이미지 태그 삽입
+    document.getElementById('imageInput').addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgTag = `<img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%;">`;
+                textarea.value += imgTag;  // textarea에 이미지 태그 추가
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

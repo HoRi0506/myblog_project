@@ -7,7 +7,7 @@
         <!-- 좌측: 현재 페이지 정보 표시 -->
         <div class="col-md-2 p-0 m-0">
             <div class="p-1">
-                <h5>자유 게시판</h5>
+                <h5>스터디 게시판</h5>
             </div>
         </div>
 
@@ -16,12 +16,12 @@
             <!-- 검색창과 게시글 작성 버튼을 같은 줄에 배치 -->
             <div class="d-flex justify-content-end align-items-center mb-3">
                 <!-- 검색창 -->
-                <form method="get" action="{% url 'board:board_post_list' %}" class="d-flex" style="flex-grow: 1; max-width: 40%;">
+                <form method="get" action="{% url 'study:study_post_list' %}" class="d-flex" style="flex-grow: 1; max-width: 40%;">
                     <input type="text" name="q" class="form-control me-2 w-50" placeholder="검색어를 입력하세요" value="{{ request.GET.q }}" style="flex-grow: 2;">
                     <button type="submit" class="btn btn-outline-secondary me-3">검색</button>
                 </form>
                 <!-- 새 게시글 작성 버튼 -->
-                <a href="{% url 'board:board_post_create' %}" class="btn btn-primary">새 게시글 작성</a>
+                <a href="{% url 'study:study_post_create' %}" class="btn btn-primary">새 게시글 작성</a>
             </div>
 
             <!-- 게시글 목록 -->
@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                     {% for post in posts %}
-                        <tr class="clickable-row" data-href="{% url 'board:board_post_detail' post.pk %}">
+                        <tr class="clickable-row" data-href="{% url 'study:study_post_detail' post.pk %}">
                             <td>{{ post.title }}</td>
                             <td>{{ post.created_at|localtime|date:"Y-m-d H:i" }}</td>
                             <td>{{ post.updated_at|localtime|date:"Y-m-d H:i" }}</td>

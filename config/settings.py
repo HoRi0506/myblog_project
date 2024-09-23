@@ -24,8 +24,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     
     "blog", # 메인
-    "board", # 게시판
+    "board", # 자유게시판
     "git_post", # git 작업물 게시판
+    "hobby", # 취미게시판
+    "study", # 스터디게시판
 
     "django.contrib.sites",
     "allauth",

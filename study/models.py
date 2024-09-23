@@ -7,9 +7,9 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)  # 게시글 작성 시간
     updated_at = models.DateTimeField(auto_now=True)  # 게시글 수정 시간
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='board_posts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='study_posts')
     
-    likes = models.ManyToManyField(User, related_name='liked_board_posts', blank=True) # 좋아요한 사용자들
+    likes = models.ManyToManyField(User, related_name='liked_study_posts', blank=True) # 좋아요한 사용자들
     counting = models.PositiveIntegerField(default=0)  # 조회수 필드 추가
 
     def total_likes(self):
@@ -21,7 +21,7 @@ class Post(models.Model):
 # 댓글
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)  # 댓글이 달린 게시글
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='board_comments')  # 댓글 작성자
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='study_comments')  # 댓글 작성자
     text = models.TextField()  # 댓글 내용
     created_at = models.DateTimeField(auto_now_add=True)  # 댓글 작성 시간
 
