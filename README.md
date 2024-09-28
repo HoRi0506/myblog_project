@@ -53,6 +53,7 @@
 <br>
 
 ## 디렉토리 구조 (Directory Structure)
+```
 myblog_project/
 │
 ├── blog/              # 메인 블로그 앱
@@ -66,7 +67,7 @@ myblog_project/
 │   ├── settings.py    # Django 설정 파일
 │   └── urls.py        # URL 라우팅 설정
 └── manage.py          # Django 관리 명령어
-
+```
 
 <strong>※ 진행 중 수정 가능 ※</strong>
 
