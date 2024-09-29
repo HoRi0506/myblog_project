@@ -73,7 +73,7 @@ myblog_project/
 ```
 
 ## ERD (Entity Relationship Diagram)
-![ERD Diagram](myblog_project_ERD.png)
+![ERD 다이어그램](ERD_images/myblog_project_ERD.png)
 
 <br>
 
