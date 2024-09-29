@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "hobby", # 취미게시판
     "study", # 스터디게시판
 
+    'django_extensions',
     "django.contrib.sites",
     "allauth",
     "allauth.account",

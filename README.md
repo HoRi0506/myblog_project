@@ -27,7 +27,10 @@
 - 스터디 및 취미 게시판 제작 및 드롭다운 메뉴 구성
 
 ### 5차 목표
+- ERD 작성
 - 도메인 설정 및 배포(AWS EC2, Django 배포 가이드 테스트 예정)
+
+<br>
 
 <strong>※ 진행 중 수정 가능 ※</strong>
 
@@ -43,12 +46,12 @@
 <br>
 
 ## 기술 스택 (Tech Stack)
-- **Backend:** Django
-- **Frontend:** HTML, CSS, JavaScript (Bootstrap 활용)
-- **Database:** SQLite (개발 환경), PostgreSQL (배포 환경 예정)
+- **Backend:** <img src="https://img.shields.io/badge/django-092E20?style=flat-square&logo=django&logoColor=white"/>
+- **Frontend:** <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/>, <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=CSS3&logoColor=white" />, <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/> (<img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white"> 활용)
+- **Database:** <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=SQLite&logoColor=white"> (개발 환경), <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=PostgreSQL&logoColor=white"> (배포 환경 예정)
 - **Authentication:** Google OAuth (django-allauth)
-- **Deployment:** GitHub Pages, AWS EC2 (예정)
-- **Version Control:** Git, GitHub
+- **Deployment:** GitHub Pages, <img src="https://img.shields.io/badge/AWS E2C-FF9900?style=for-the-badge&logo=AWS EC2&logoColor=white"> (예정)
+- **Version Control:** <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"/>, <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/>
 
 <br>
 
@@ -69,6 +72,11 @@ myblog_project/
 └── manage.py          # Django 관리 명령어
 ```
 
+## ERD (Entity Relationship Diagram)
+![ERD Diagram](myblog_project_ERD.png)
+
+<br>
+
 <strong>※ 진행 중 수정 가능 ※</strong>
 
 <br>
@@ -87,3 +95,5 @@ myblog_project/
 - [3차 목표](https://www.notion.so/3-8c9d610edd17439cae4d8266d632488c?pvs=4)
 
 - [4차 목표](https://www.notion.so/4-547b31de74bd4f38ad37e9dc57583ac4?pvs=4)
+
+- [5차 목표](https://www.notion.so/5-1108999765e280daa708c6f0bb61ce37?pvs=4)

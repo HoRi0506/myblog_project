@@ -4,3 +4,4 @@ board/migrations/
 token.json
 media/
 django_key.json
+*_ERD.png
