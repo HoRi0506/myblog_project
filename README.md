@@ -72,6 +72,8 @@ myblog_project/
 └── manage.py          # Django 관리 명령어
 ```
 
+<br>
+
 ## ERD (Entity Relationship Diagram)
 ![ERD 다이어그램](ERD_images/myblog_project_ERD.png)
 
