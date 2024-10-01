@@ -99,3 +99,7 @@ myblog_project/
 - [4차 목표](https://www.notion.so/4-547b31de74bd4f38ad37e9dc57583ac4?pvs=4)
 
 - [5차 목표](https://www.notion.so/5-1108999765e280daa708c6f0bb61ce37?pvs=4)
+  
+- [AWS EC2 배포 가이드](https://www.notion.so/AWS-EC2-1128999765e280cd965bd5562284e468?pvs=4)
+  
+- [Django 배포 가이드](https://www.notion.so/Django-1128999765e28036a2a5dfee2c64c824?pvs=4)
