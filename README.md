@@ -115,21 +115,21 @@ myblog_project/
 <br>
 
 - Posts
-  ![자유 게시판](media/base/board.png)
+  ![자유 게시판](media/base/board_page.png)
 
 <br>
 
 - Study
-  ![스터디 게시판](media/base/study.png)
+  ![스터디 게시판](media/base/study_page.png)
 
 <br>
 
 - Hobby
-  ![취미 게시판](media/base/hobby.png)
+  ![취미 게시판](media/base/hobby_page.png)
 
 <br>
 
 - GitHub Posts
-  ![GitHub Posts](media/base/git_post.png)
+  ![GitHub Posts](media/base/git_post_page.png)
 
 <br>
