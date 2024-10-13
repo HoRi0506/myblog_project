@@ -103,3 +103,33 @@ myblog_project/
 - [AWS EC2 배포 가이드](https://www.notion.so/AWS-EC2-1128999765e280cd965bd5562284e468?pvs=4)
   
 - [Django 배포 가이드](https://www.notion.so/Django-1128999765e28036a2a5dfee2c64c824?pvs=4)
+
+
+## 결과
+- 도메인을 무료로 구할 수 있는 방법이 있지만 안정적이지 않아서 추후 도메인 구매 후 더욱 업그레이드 할 예정
+
+- 로컬에서 실행한 제작 페이지 모습
+- main page
+  ![Main page](media/base/main_page.png)
+
+<br>
+
+- Posts
+  ![자유 게시판](media/base/board.png)
+
+<br>
+
+- Study
+  ![스터디 게시판](media/base/study.png)
+
+<br>
+
+- Hobby
+  ![취미 게시판](media/base/hobby.png)
+
+<br>
+
+- GitHub Posts
+  ![GitHub Posts](media/base/git_post.png)
+
+<br>
